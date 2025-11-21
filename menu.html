@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta description content="Korangi Mini Shop - Local Delivery">
+<meta keywords content="Korangi shop, Korangi delivery, Korangi grocery, online store Korangi, mini shop Korangi, local delivery Karachi">
+<title>Korangi Mini Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Poppins',sans-serif;background:#f5f5f7;}
+header{background:#111827;color:#fff;padding:20px 30px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+header h2{margin:0;font-weight:600;}
+.cart-icon{cursor:pointer;font-size:28px;position:relative;}
+.count{background:#ef4444;color:#fff;border-radius:50%;font-size:12px;padding:3px 7px;position:absolute;top:-10px;right:-10px;}
+.container{max-width:1200px;margin:auto;padding:30px;}
+.category-section{margin-bottom:40px;}
+.category-title{font-size:24px;margin-bottom:15px;font-weight:600;color:#111827;display:flex;justify-content:space-between;align-items:center;}
+.product-slider-wrapper{position:relative;}
+.product-slider{display:flex;gap:20px;overflow-x:auto;scroll-behavior:smooth;padding-bottom:10px;}
+.card{min-width:220px;background:white;padding:18px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.1);border:1px solid #e5e7eb;text-align:center;transition:0.3s;}
+.card:hover{transform:translateY(-5px);}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;}
+.card h4{margin:0;font-size:18px;font-weight:600;color:#1f2937;}
+.card p{margin:6px 0 12px;color:#4b5563;}
+button.add-cart{padding:10px 15px;background:#10b981;color:white;border:none;width:100%;border-radius:8px;cursor:pointer;font-size:15px;font-weight:600;transition:0.3s;}
+button.add-cart:hover{background:#059669;}
+.arrow-btn{position:absolute;top:50%;transform:translateY(-50%);background:#2563eb;color:white;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
+.arrow-left{left:-15px;}
+.arrow-right{right:-15px;}
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+<!-- Loader Screen -->
+<div id="siteLoader" style="
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:#ffffff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+  z-index:999999;
+">
+  <!-- GIF -->
+  <img src="./预览图_千图网_编号35441224.gif" alt="Loading..." style="width:280px; height: 300px; margin-bottom:20px;">
+  
+  <!-- Text under GIF -->
+  <div style="
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  ">
+    Korangi Mini Shopping
+  </div>
+</div>
+
+<script>
+// Fixed 4-second loader
+setTimeout(function() {
+  document.getElementById("siteLoader").style.display = "none";
+}, 6000); // 4000ms = 4 seconds
+</script>
+
+
+
+
+
+
+
+
+
+  
+<header>
+  <h2>Korangi Mini Shop</h2>
+  <div class="cart-icon"><a href="card.html" style="color:white;text-decoration:none;">🛒</a> <span class="count" id="count">0</span></div>
+</header>
+
+<div class="container" id="container"></div>
+
+<script>
+const categories = {
+  grocery: [
+    {name:'Sugar 1kg',price:180,img:'images/sugar.jpg'},
+    {name:'Flour 5kg',price:550,img:'images/flour.jpg'},
+    {name:'Rice 1kg',price:240,img:'images/rice.jpg'},
+    {name:'Tea 200g',price:220,img:'images/tea.jpg'},
+    {name:'Salt Pack',price:50,img:'images/salt.jpg'},
+    {name:'Salt Pack',price:50,img:'images/salt.jpg'},
+    {name:'Salt Pack',price:50,img:'images/salt.jpg'}
+  ],
+  cosmetics: [
+    {name:'Fairness Cream',price:200,img:'images/fairness.jpg'},
+    {name:'Hair Oil',price:150,img:'images/hair_oil.jpg'},
+    {name:'Shampoo',price:260,img:'images/shampoo.jpg'},
+    {name:'Face Wash',price:180,img:'images/facewash.jpg'},
+    {name:'Perfume Small',price:300,img:'images/perfume.jpg'}
+  ],
+  snacks: [
+    {name:'Chips',price:50,img:'images/chips.jpg'},
+    {name:'Biscuits',price:40,img:'images/biscuits.jpg'},
+    {name:'Chocolate',price:120,img:'images/chocolate.jpg'},
+    {name:'Juice Pack',price:80,img:'images/juice.jpg'},
+    {name:'Cake Rusk',price:100,img:'images/cake_rusk.jpg'}
+  ],
+  kitchen: [
+    {name:'Plate Set',price:300,img:'images/plate.jpg'},
+    {name:'Glass Set',price:250,img:'images/glass.jpg'},
+    {name:'Knife',price:120,img:'images/knife.jpg'},
+    {name:'Spoon Set',price:100,img:'images/spoon.jpg'},
+    {name:'Fry Pan',price:650,img:'images/frypan.jpg'}
+  ]
+};
+
+function renderCategories(){
+  const container = document.getElementById('container');
+  container.innerHTML = '';
+  for(let cat in categories){
+    let section = document.createElement('div');
+    section.className = 'category-section';
+    section.innerHTML = `<div class='category-title'>${cat.toUpperCase()}</div>
+    <div class='product-slider-wrapper'>
+      <button class='arrow-btn arrow-left' onclick='scrollSlider("${cat}",-300)'>&lt;</button>
+      <div class='product-slider' id='slider-${cat}'></div>
+      <button class='arrow-btn arrow-right' onclick='scrollSlider("${cat}",300)'>&gt;</button>
+    </div>`;
+    container.appendChild(section);
+
+    let slider = section.querySelector(`#slider-${cat}`);
+    categories[cat].forEach(product => {
+      let card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src='${product.img}' alt='${product.name}' />
+        <h4>${product.name}</h4>
+        <p>Rs ${product.price}</p>
+        <button class='add-cart' onclick="addCart('${product.name}',${product.price})">Add to Cart</button>
+      `;
+      slider.appendChild(card);
+    });
+  }
+}
+
+function scrollSlider(cat, offset){
+  const slider = document.getElementById(`slider-${cat}`);
+  slider.scrollBy({left: offset, behavior: 'smooth'});
+}
+
+function addCart(name,price){
+  let cart = JSON.parse(localStorage.getItem('korangiCart')||'[]');
+  let found = cart.find(i=>i.name===name);
+  if(found){found.qty++;}
+  else{cart.push({name,price,qty:1});}
+  localStorage.setItem('korangiCart',JSON.stringify(cart));
+  updateCount();
+}
+
+function updateCount(){
+  let cart = JSON.parse(localStorage.getItem('korangiCart')||'[]');
+  let total = cart.reduce((a,i)=>a+(i.qty||0),0);
+  document.getElementById('count').innerText = total;
+}
+
+renderCategories();
+updateCount();
+</script>
+
+<script src="importantcode.js" ></script>
+</body>
+</html>
