@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Signup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #4f46e5, #9333ea);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .box {
+      width: 380px;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    h2 { margin-bottom: 20px; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      border: none;
+      color: #fff;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    button:hover { opacity: 0.8; }
+    .signup-btn { background: #10b981; }
+    .login-btn { background: #4f46e5; }
+    .google-btn { background: #db4437; margin-top: 10px; }
+    #output {
+      background: #f8fafc;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login / Signup</h2>
+
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+
+    <button class="login-btn" onclick="login()">Login</button>
+    <button class="signup-btn" onclick="signup()">Signup</button>
+
+    <button class="google-btn" onclick="googleLogin()">Login with Google</button>
+    <button style="margin-top:10px;background:#f59e0b" onclick="resetPassword()">Forgot Password?</button>
+
+    <div id="output"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOmvdnVQpj2iSTnHgWpWZFEPxXdAOO6SA",
+      authDomain: "korangiminishop.firebaseapp.com",
+      projectId: "korangiminishop",
+      storageBucket: "korangiminishop.firebasestorage.app",
+      messagingSenderId: "455099459942",
+      appId: "1:455099459942:web:dde7c032c606df71ecc0a7",
+      measurementId: "G-Y7F7CW373B"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    function write(msg){ document.getElementById("output").innerText = msg; }
+
+    window.signup = () => {
+      const emailVal = document.getElementById("email").value;
+      const passwordVal = document.getElementById("password").value;
+      createUserWithEmailAndPassword(auth, emailVal, passwordVal)
+        .then(() => {
+          write("Signup Successful! Redirecting...");
+          setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+        })
+        .catch(err => write(err.message));
+    }
+
+    window.login = () => {
+      const emailVal = document.getElementById("email").value;
+      const passwordVal = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, emailVal, passwordVal)
+        .then(() => {
+          write("Login Successful! Redirecting...");
+          setTimeout(() => { window.location.href = "index.html" }, 1500);
+        })
+        .catch(err => write(err.message));
+    }
+
+    window.googleLogin = () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(result => {
+          document.getElementById("email").value = result.user.email;
+          write("Google Login Successful! Redirecting...");
+          setTimeout(() => { window.location.href = "index.html"; }, 1500);
+        })
+        .catch(err => write(err.message));
+    }
+
+    window.resetPassword = () => {
+      const emailVal = document.getElementById("email").value;
+      if(!emailVal){ write("Please enter your email first."); return; }
+      sendPasswordResetEmail(auth, emailVal)
+        .then(() => write("Password reset email sent!"))
+        .catch(err => write(err.message));
+    }
+  </script>
+</body>
+</html>
